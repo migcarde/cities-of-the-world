@@ -1,6 +1,6 @@
 import 'package:data/remote/cities_remote_datasource.dart';
 import 'package:data/remote/client/cities_client.dart';
-import 'package:data/remote/entities/base_response.dart';
+import 'package:data/remote/entities/base_response_remote_entity.dart';
 
 class CitiesRemoteDatasourceImpl implements CitiesRemoteDatasource {
   final CitiesClient client;
@@ -10,7 +10,7 @@ class CitiesRemoteDatasourceImpl implements CitiesRemoteDatasource {
   });
 
   @override
-  Future<BaseResponse> getCities({
+  Future<BaseResponseRemoteEntity> getCities({
     int? page,
     String? include,
     String? name,

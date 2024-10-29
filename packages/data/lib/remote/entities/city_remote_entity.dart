@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'country.dart';
+import 'country_remote_entity.dart';
 
-part 'city.g.dart';
+part 'city_remote_entity.g.dart';
 
 @JsonSerializable()
-class City {
+class CityRemoteEntity {
   int? id;
   String? name;
   @JsonKey(name: 'local_name')
@@ -16,9 +16,9 @@ class City {
   DateTime? updatedAt;
   @JsonKey(name: 'country_id')
   int? countryId;
-  Country? country;
+  CountryRemoteEntity? country;
 
-  City({
+  CityRemoteEntity({
     this.id,
     this.name,
     this.localName,
@@ -28,7 +28,8 @@ class City {
     this.country,
   });
 
-  factory City.fromJson(Map<String, dynamic> json) => _$CityFromJson(json);
+  factory CityRemoteEntity.fromJson(Map<String, dynamic> json) =>
+      _$CityRemoteEntityFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CityToJson(this);
+  Map<String, dynamic> toJson() => _$CityRemoteEntityToJson(this);
 }

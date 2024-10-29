@@ -1,19 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'base_response.dart';
+part of 'base_response_remote_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
+BaseResponseRemoteEntity _$BaseResponseRemoteEntityFromJson(
+        Map<String, dynamic> json) =>
+    BaseResponseRemoteEntity(
       data: json['data'] == null
           ? null
-          : Page.fromJson(json['data'] as Map<String, dynamic>),
+          : PageRemoteEntity.fromJson(json['data'] as Map<String, dynamic>),
       time: (json['time'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
+Map<String, dynamic> _$BaseResponseRemoteEntityToJson(
+        BaseResponseRemoteEntity instance) =>
     <String, dynamic>{
       'data': instance.data,
       'time': instance.time,

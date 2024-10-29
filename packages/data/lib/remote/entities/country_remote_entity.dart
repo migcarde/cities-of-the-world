@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'country.g.dart';
+part 'country_remote_entity.g.dart';
 
 @JsonSerializable()
-class Country {
+class CountryRemoteEntity {
   int? id;
   String? name;
   String? code;
@@ -14,7 +14,7 @@ class Country {
   @JsonKey(name: 'continent_id')
   int? continentId;
 
-  Country({
+  CountryRemoteEntity({
     this.id,
     this.name,
     this.code,
@@ -23,9 +23,9 @@ class Country {
     this.continentId,
   });
 
-  factory Country.fromJson(Map<String, dynamic> json) {
-    return _$CountryFromJson(json);
+  factory CountryRemoteEntity.fromJson(Map<String, dynamic> json) {
+    return _$CountryRemoteEntityFromJson(json);
   }
 
-  Map<String, dynamic> toJson() => _$CountryToJson(this);
+  Map<String, dynamic> toJson() => _$CountryRemoteEntityToJson(this);
 }

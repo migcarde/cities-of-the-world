@@ -1,4 +1,4 @@
-import 'package:data/remote/entities/base_response.dart';
+import 'package:data/remote/entities/base_response_remote_entity.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
@@ -14,7 +14,7 @@ abstract class CitiesClient {
   }) = _CitiesClient;
 
   @GET('v1/city')
-  Future<BaseResponse> getCities({
+  Future<BaseResponseRemoteEntity> getCities({
     @Query('page') int? page,
     @Query('include') String? include,
     @Query('filter[0][name][contains]') String? name,

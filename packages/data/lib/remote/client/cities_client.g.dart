@@ -22,7 +22,7 @@ class _CitiesClient implements CitiesClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<BaseResponse> getCities({
+  Future<BaseResponseRemoteEntity> getCities({
     int? page,
     String? include,
     String? name,
@@ -36,7 +36,7 @@ class _CitiesClient implements CitiesClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<BaseResponse>(Options(
+    final _options = _setStreamType<BaseResponseRemoteEntity>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -53,9 +53,9 @@ class _CitiesClient implements CitiesClient {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse _value;
+    late BaseResponseRemoteEntity _value;
     try {
-      _value = BaseResponse.fromJson(_result.data!);
+      _value = BaseResponseRemoteEntity.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
