@@ -1,7 +1,8 @@
 library data;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+// Remote
+export 'remote/entities/remote_entities.dart';
+export 'remote/cities_remote_datasource.dart';
+
+// Core
+export 'core/data_di.dart';

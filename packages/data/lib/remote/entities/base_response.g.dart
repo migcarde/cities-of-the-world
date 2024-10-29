@@ -9,7 +9,7 @@ part of 'base_response.dart';
 BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
       data: json['data'] == null
           ? null
-          : Data.fromJson(json['data'] as Map<String, dynamic>),
+          : Page.fromJson(json['data'] as Map<String, dynamic>),
       time: (json['time'] as num?)?.toInt(),
     );
 

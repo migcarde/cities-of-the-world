@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'data.dart';
+part of 'page.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Data _$DataFromJson(Map<String, dynamic> json) => Data(
+Page _$PageFromJson(Map<String, dynamic> json) => Page(
       items: (json['items'] as List<dynamic>?)
           ?.map((e) => City.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,7 +15,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : Pagination.fromJson(json['pagination'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'items': instance.items,
       'pagination': instance.pagination,
     };

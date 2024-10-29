@@ -1,12 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'data.dart';
+import 'page.dart';
 
 part 'base_response.g.dart';
 
 @JsonSerializable()
 class BaseResponse {
-  Data? data;
+  Page? data;
   int? time;
 
   BaseResponse({this.data, this.time});

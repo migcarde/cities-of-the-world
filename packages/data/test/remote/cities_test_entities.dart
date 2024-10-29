@@ -1,11 +1,11 @@
 import 'package:data/remote/entities/base_response.dart';
 import 'package:data/remote/entities/city.dart';
 import 'package:data/remote/entities/country.dart';
-import 'package:data/remote/entities/data.dart';
+import 'package:data/remote/entities/page.dart';
 
 final baseResponseRemoteEntity = BaseResponse(
   time: 31031401,
-  data: Data(
+  data: Page(
     items: [
       City(
         id: 1,

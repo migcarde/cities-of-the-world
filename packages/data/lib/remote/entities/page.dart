@@ -2,16 +2,16 @@ import 'package:data/remote/entities/city.dart';
 import 'package:data/remote/entities/pagination.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'data.g.dart';
+part 'page.g.dart';
 
 @JsonSerializable()
-class Data {
+class Page {
   List<City>? items;
   Pagination? pagination;
 
-  Data({this.items, this.pagination});
+  Page({this.items, this.pagination});
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DataToJson(this);
+  Map<String, dynamic> toJson() => _$PageToJson(this);
 }
