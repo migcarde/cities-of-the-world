@@ -14,10 +14,17 @@ class CitiesList extends StatelessWidget {
   final bool isLastPage;
   final VoidCallback getNextPage;
 
+  static const _paddingHorizontal = 8.0;
+  static const _paddingVertical = 12.0;
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(
+        vertical: _paddingVertical,
+        horizontal: _paddingHorizontal,
+      ),
       controller: _setUpController(),
       itemBuilder: (context, index) {
         if (index >= cities.length) {

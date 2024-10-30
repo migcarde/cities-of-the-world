@@ -1,21 +1,29 @@
-import 'package:cities_of_the_world/ui/cities/models/city_view_model.dart';
+import 'package:cities_of_the_world/ui/cities/cubit/cities_cubit.dart';
 import 'package:cities_of_the_world/ui/cities/widgets/cities_list.dart';
-import 'package:cities_of_the_world/ui/cities/widgets/cities_map.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CitiesMobileLayout extends StatelessWidget {
+class CitiesMobileLayout extends StatefulWidget {
   const CitiesMobileLayout({
     super.key,
-    required this.tabController,
-    required this.cities,
-    required this.isLastPage,
-    required this.getNextPage,
   });
 
-  final TabController tabController;
-  final List<CityViewModel> cities;
-  final bool isLastPage;
-  final VoidCallback getNextPage;
+  @override
+  State<CitiesMobileLayout> createState() => _CitiesMobileLayoutState();
+}
+
+class _CitiesMobileLayoutState extends State<CitiesMobileLayout>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,7 @@ class CitiesMobileLayout extends StatelessWidget {
           SizedBox(
             height: 44.0,
             child: TabBar(
-              controller: tabController,
+              controller: _tabController,
               tabs: const [
                 Tab(
                   text: 'List',
@@ -35,19 +43,37 @@ class CitiesMobileLayout extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: TabBarView(
-              controller: tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                CitiesList(
-                  cities: cities,
-                  isLastPage: isLastPage,
-                  getNextPage: getNextPage,
-                ),
-                CitiesMap(
-                  cities: cities,
-                ),
-              ],
+            child: BlocBuilder<CitiesCubit, CitiesState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case CitiesStatus.loading:
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  case CitiesStatus.data:
+                    return TabBarView(
+                      controller: _tabController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        CitiesList(
+                          cities: state.cities,
+                          isLastPage: state.isLastPage,
+                          getNextPage: () =>
+                              context.read<CitiesCubit>().getNextPage(),
+                        ),
+                        // CitiesMap(
+                        //   cities: state.cities,
+                        // ),
+                        Text('Map'),
+                      ],
+                    );
+                  case CitiesStatus.error:
+                    return const Center(
+                      child: Text(
+                          'Ooops, something was wrong, please, try again later'),
+                    );
+                }
+              },
             ),
           ),
         ],

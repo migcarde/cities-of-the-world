@@ -21,6 +21,8 @@ class CitiesState extends Equatable {
     this.currentSearch = '',
   });
 
+  bool get isLastPage => currentPage >= lastPage;
+
   @override
   List<Object?> get props => [
         status,
