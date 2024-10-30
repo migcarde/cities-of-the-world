@@ -24,13 +24,15 @@ class CityLocalEntityAdapter extends TypeAdapter<CityLocalEntity> {
       country: fields[6] as CountryLocalEntity?,
       createdAt: fields[3] as DateTime?,
       updatedAt: fields[4] as DateTime?,
+      latitude: fields[7] as double?,
+      longitude: fields[8] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CityLocalEntity obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class CityLocalEntityAdapter extends TypeAdapter<CityLocalEntity> {
       ..writeByte(5)
       ..write(obj.countryId)
       ..writeByte(6)
-      ..write(obj.country);
+      ..write(obj.country)
+      ..writeByte(7)
+      ..write(obj.latitude)
+      ..writeByte(8)
+      ..write(obj.longitude);
   }
 
   @override

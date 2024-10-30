@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:data/local/entities/city_local_entity.dart';
 import 'package:data/local/entities/country_local_entity.dart';
 import 'package:data/local/entities/page_local_entity.dart';
@@ -43,6 +44,33 @@ final baseResponseRemoteEntity = BaseResponseRemoteEntity(
   ),
 );
 
+final pageRemoteEntityWithDifferenteLocalName = PageRemoteEntity(
+  items: [
+    CityRemoteEntity(
+      id: 1,
+      name: 'Chipiona',
+      localName: 'Sanlucar',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      country: CountryRemoteEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: PaginationRemoteEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
+  ),
+);
+
 // Entities
 final baseResponseEntity = BaseResponseEntity(
   time: 31031401,
@@ -71,6 +99,91 @@ final baseResponseEntity = BaseResponseEntity(
       perPage: 24,
       total: 100,
     ),
+  ),
+);
+
+final pageEntityWithLocation = PageEntity(
+  items: [
+    CityEntity(
+      id: 1,
+      name: 'Chipiona',
+      localName: 'Chipiona',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      latitude: 120.0,
+      longitude: 60.0,
+      country: CountryEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: const PaginationEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
+  ),
+);
+
+final pageEntityWithDifferentLocalName = PageEntity(
+  items: [
+    CityEntity(
+      id: 1,
+      name: 'Chipiona',
+      localName: 'Sanlucar',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      latitude: 120.0,
+      longitude: 60.0,
+      country: CountryEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: const PaginationEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
+  ),
+);
+
+final pageEntityWithDifferentLocalNameWihoutLocation = PageEntity(
+  items: [
+    CityEntity(
+      id: 1,
+      name: 'Chipiona',
+      localName: 'Sanlucar',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      country: CountryEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: const PaginationEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
   ),
 );
 
@@ -172,4 +285,10 @@ final pageLocalEntityWithEmptySearch = PageLocalEntity(
     perPage: 24,
     total: 100,
   ),
+);
+
+// Location entities
+const locationEntity = LocationEntity(
+  latitude: 120.0,
+  longitude: 60.0,
 );

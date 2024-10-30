@@ -56,6 +56,6 @@ class CityLocalEntity extends HiveObject with EquatableMixin {
         createdAt,
         updatedAt,
         latitude,
-        longitude,
+        longitude
       ];
 }

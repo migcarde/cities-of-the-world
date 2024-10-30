@@ -5,8 +5,8 @@ import 'package:domain/domain.dart';
 
 class CitiesOfTheWorldDi {
   static Future<void> init() async {
-    DomainDi.init();
     ServicesDi.init();
+    DomainDi.init();
     CubitsDi.init();
 
     await getIt.allReady();

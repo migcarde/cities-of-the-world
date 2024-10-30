@@ -1,17 +1,18 @@
 import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:domain/base/result.dart';
-import 'package:domain/models/page_entity.dart';
+import 'package:domain/domain.dart';
 import 'package:domain/repositories/cities/cities_repository.dart';
-import 'package:domain/models/base_response_entity.dart';
 
 class CitiesRepositoryImpl implements CitiesRepository {
   final CitiesRemoteDatasource citiesRemoteDatasource;
   final CitiesLocalDatasource citiesLocalDatasource;
+  final LocationService locationService;
 
   const CitiesRepositoryImpl({
     required this.citiesRemoteDatasource,
     required this.citiesLocalDatasource,
+    required this.locationService,
   });
 
   @override
@@ -35,13 +36,21 @@ class CitiesRepositoryImpl implements CitiesRepository {
         return Result.success(localResult!);
       }
 
-      final result = await citiesRemoteDatasource.getCities(
+      final response = await citiesRemoteDatasource.getCities(
         page: page,
         include: include,
         name: name,
       );
 
-      return Result.success(result.entity.data!);
+      final result =
+          await getEntitiesWithCoordinates(pageRemoteEntity: response.data!);
+
+      saveCities(
+        search: name ?? '',
+        page: result,
+      );
+
+      return Result.success(result);
     } catch (e) {
       logger.error(e);
 
@@ -86,5 +95,35 @@ class CitiesRepositoryImpl implements CitiesRepository {
 
       return Result.failure(e);
     }
+  }
+
+  Future<PageEntity> getEntitiesWithCoordinates({
+    required PageRemoteEntity pageRemoteEntity,
+  }) async {
+    final List<CityRemoteEntity> items = pageRemoteEntity.items ?? [];
+    List<CityEntity> updatedCities = [];
+
+    for (var i = 0; i < items.length; i++) {
+      final item = items[i];
+
+      LocationEntity? location = await locationService.getLocationFromAddress(
+        address: item.name ?? '',
+      );
+
+      location ??= await locationService.getLocationFromAddress(
+        address: item.localName ?? '',
+      );
+
+      updatedCities.add(
+        item.entity.copyWith(
+          latitude: location?.latitude,
+          longitude: location?.longitude,
+        ),
+      );
+    }
+
+    return pageRemoteEntity.entity.copyWith(
+      items: updatedCities,
+    );
   }
 }

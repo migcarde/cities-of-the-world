@@ -32,6 +32,15 @@ class PageEntity extends Equatable {
             ),
         search: search,
       );
+
+  PageEntity copyWith({
+    List<CityEntity>? items,
+    PaginationEntity? pagination,
+  }) =>
+      PageEntity(
+        items: items ?? this.items,
+        pagination: pagination ?? this.pagination,
+      );
 }
 
 extension PageRemoteEntityExtensions on PageRemoteEntity {

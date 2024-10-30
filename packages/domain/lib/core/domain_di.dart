@@ -13,6 +13,7 @@ class DomainDi {
       () => CitiesRepositoryImpl(
         citiesRemoteDatasource: getIt(),
         citiesLocalDatasource: getIt(),
+        locationService: getIt(),
       ),
     );
 

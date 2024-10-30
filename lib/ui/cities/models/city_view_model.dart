@@ -26,11 +26,7 @@ class CityViewModel extends Equatable {
 }
 
 extension CityEntityExtensions on CityEntity {
-  CityViewModel viewModel({
-    double? latitude,
-    double? longitude,
-  }) =>
-      CityViewModel(
+  CityViewModel get viewModel => CityViewModel(
         name: name,
         latitude: latitude,
         longitude: longitude,

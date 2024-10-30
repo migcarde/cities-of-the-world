@@ -1,20 +1,16 @@
 import 'package:bloc/bloc.dart';
-import 'package:cities_of_the_world/core/services/location_service.dart';
 import 'package:cities_of_the_world/ui/cities/models/city_view_model.dart';
 import 'package:core/core.dart';
 import 'package:domain/base/result.dart';
 import 'package:domain/domain.dart';
-import 'package:geocoding/geocoding.dart';
 
 part 'cities_state.dart';
 
 class CitiesCubit extends Cubit<CitiesState> {
   final GetCities getCities;
-  final LocationService locationService;
 
   CitiesCubit({
     required this.getCities,
-    required this.locationService,
   }) : super(const CitiesState());
 
   Future<void> init() async {
@@ -28,7 +24,7 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     result.when(
       success: (response) async => await _onSuccessInit(
-        cities: response.items,
+        page: response,
         lastPage: response.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
@@ -43,7 +39,7 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     result.when(
       success: (response) async => await _onSuccessUpdate(
-        cities: response.items,
+        page: response,
         lastPage: response.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
@@ -66,7 +62,7 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     result.when(
       success: (response) async => await _onSuccessSearch(
-        cities: response.items,
+        page: response,
         lastPage: response.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
@@ -74,51 +70,41 @@ class CitiesCubit extends Cubit<CitiesState> {
   }
 
   Future<void> _onSuccessInit({
-    required List<CityEntity> cities,
+    required PageEntity page,
     required int lastPage,
   }) async =>
       emit(
         state.copyWith(
-          status: cities.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
-          cities: await _getCitiesAndCoordinates(
-            cities: cities,
-          ),
+          status: page.items.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
+          cities: page.items.map((item) => item.viewModel).toList(),
           currentPage: 1,
           lastPage: lastPage,
         ),
       );
 
   Future<void> _onSuccessUpdate({
-    required List<CityEntity> cities,
-    required int lastPage,
-  }) async {
-    final citiesToAdd = await _getCitiesAndCoordinates(
-      cities: cities,
-    );
-
-    emit(
-      state.copyWith(
-        status: cities.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
-        cities: [
-          ...state.cities,
-          ...citiesToAdd,
-        ],
-        currentPage: state.currentPage + 1,
-        lastPage: lastPage,
-      ),
-    );
-  }
-
-  Future<void> _onSuccessSearch({
-    required List<CityEntity> cities,
+    required PageEntity page,
     required int lastPage,
   }) async =>
       emit(
         state.copyWith(
-          status: cities.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
-          cities: await _getCitiesAndCoordinates(
-            cities: cities,
-          ),
+          cities: [
+            ...state.cities,
+            ...page.items.map((item) => item.viewModel),
+          ],
+          currentPage: state.currentPage + 1,
+          lastPage: lastPage,
+        ),
+      );
+
+  Future<void> _onSuccessSearch({
+    required PageEntity page,
+    required int lastPage,
+  }) async =>
+      emit(
+        state.copyWith(
+          status: page.items.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
+          cities: page.items.map((item) => item.viewModel).toList(),
           currentPage: 1,
           lastPage: lastPage,
         ),
@@ -141,32 +127,4 @@ class CitiesCubit extends Cubit<CitiesState> {
           name: city,
         ),
       );
-
-  Future<Location?> _getLocation({required String name}) async {
-    final result = await locationService.getLocationFromAddress(
-      address: name,
-    );
-
-    return result;
-  }
-
-  Future<List<CityViewModel>> _getCitiesAndCoordinates({
-    required List<CityEntity> cities,
-  }) async {
-    List<CityViewModel> result = [];
-
-    for (var i = 0; i < cities.length; i++) {
-      final city = cities[i];
-      final location = await _getLocation(name: city.name);
-
-      result.add(
-        city.viewModel(
-          latitude: location?.latitude,
-          longitude: location?.longitude,
-        ),
-      );
-    }
-
-    return result;
-  }
 }

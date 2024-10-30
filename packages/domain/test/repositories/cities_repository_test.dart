@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:domain/base/result.dart';
 import 'package:domain/repositories/cities/cities_repository_impl.dart';
@@ -11,17 +12,22 @@ class CitiesRemoteDatasourceMock extends Mock
 
 class CitiesLocalDatasourceMock extends Mock implements CitiesLocalDatasource {}
 
+class LocationServiceMock extends Mock implements LocationService {}
+
 void main() {
   late CitiesRemoteDatasourceMock citiesRemoteDatasource;
   late CitiesLocalDatasourceMock citiesLocalDatasource;
+  late LocationServiceMock locationService;
   late CitiesRepositoryImpl citiesRepository;
 
   setUp(() {
     citiesRemoteDatasource = CitiesRemoteDatasourceMock();
     citiesLocalDatasource = CitiesLocalDatasourceMock();
+    locationService = LocationServiceMock();
     citiesRepository = CitiesRepositoryImpl(
       citiesRemoteDatasource: citiesRemoteDatasource,
       citiesLocalDatasource: citiesLocalDatasource,
+      locationService: locationService,
     );
   });
 
@@ -30,6 +36,8 @@ void main() {
       // Given
       when(() => citiesRemoteDatasource.getCities())
           .thenAnswer((_) async => baseResponseRemoteEntity);
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
 
       // When
       final result = await citiesRepository.getCities();
@@ -43,6 +51,8 @@ void main() {
       // Given
       when(() => citiesRemoteDatasource.getCities(name: 'na'))
           .thenAnswer((_) async => baseResponseRemoteEntity);
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
 
       // When
       final result = await citiesRepository.getCities(
@@ -58,6 +68,8 @@ void main() {
       // Given
       when(() => citiesRemoteDatasource.getCities(page: 1))
           .thenAnswer((_) async => baseResponseRemoteEntity);
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
 
       // When
       final result = await citiesRepository.getCities(
@@ -73,6 +85,8 @@ void main() {
       // Given
       when(() => citiesRemoteDatasource.getCities(include: 'country'))
           .thenAnswer((_) async => baseResponseRemoteEntity);
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
 
       // When
       final result = await citiesRepository.getCities(
@@ -92,6 +106,8 @@ void main() {
             page: 1,
             include: 'country',
           )).thenAnswer((_) async => baseResponseRemoteEntity);
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
 
       // When
       final result = await citiesRepository.getCities(
@@ -246,6 +262,61 @@ void main() {
 
       expect(result, isA<Failure>());
       verify(() => citiesLocalDatasource.getCities(search: 'na', page: 1))
+          .called(1);
+    });
+  });
+
+  group('Get entities with coordinates -', () {
+    test('Success with city name', () async {
+      // Given
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => locationEntity);
+
+      // When
+      final result = await citiesRepository.getEntitiesWithCoordinates(
+        pageRemoteEntity: baseResponseRemoteEntity.data!,
+      );
+
+      expect(result, pageEntityWithLocation);
+      verify(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .called(1);
+    });
+
+    test('Success with city local name', () async {
+      // Given
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
+      when(() => locationService.getLocationFromAddress(address: 'Sanlucar'))
+          .thenAnswer((_) async => locationEntity);
+
+      // When
+      final result = await citiesRepository.getEntitiesWithCoordinates(
+        pageRemoteEntity: pageRemoteEntityWithDifferenteLocalName,
+      );
+
+      expect(result, pageEntityWithDifferentLocalName);
+      verify(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .called(1);
+      verify(() => locationService.getLocationFromAddress(address: 'Sanlucar'))
+          .called(1);
+    });
+
+    test('Success with null value', () async {
+      // Given
+      when(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .thenAnswer((_) async => null);
+      when(() => locationService.getLocationFromAddress(address: 'Sanlucar'))
+          .thenAnswer((_) async => null);
+
+      // When
+      final result = await citiesRepository.getEntitiesWithCoordinates(
+        pageRemoteEntity: pageRemoteEntityWithDifferenteLocalName,
+      );
+
+      expect(result, pageEntityWithDifferentLocalNameWihoutLocation);
+      verify(() => locationService.getLocationFromAddress(address: 'Chipiona'))
+          .called(1);
+      verify(() => locationService.getLocationFromAddress(address: 'Sanlucar'))
           .called(1);
     });
   });

@@ -9,4 +9,3 @@ export 'remote/cities_remote_datasource.dart';
 // Local
 export 'local/entities/local_entities.dart';
 export 'local/cities_local_datasource.dart';
-export 'local/hive_adapters.dart';
