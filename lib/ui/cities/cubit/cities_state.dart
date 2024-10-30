@@ -4,6 +4,7 @@ enum CitiesStatus {
   loading,
   data,
   error,
+  empty,
 }
 
 class CitiesState extends Equatable {

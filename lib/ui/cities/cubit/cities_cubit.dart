@@ -79,7 +79,7 @@ class CitiesCubit extends Cubit<CitiesState> {
   }) async =>
       emit(
         state.copyWith(
-          status: CitiesStatus.data,
+          status: cities.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
           cities: await _getCitiesAndCoordinates(
             cities: cities,
           ),
@@ -98,7 +98,7 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     emit(
       state.copyWith(
-        status: CitiesStatus.data,
+        status: cities.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
         cities: [
           ...state.cities,
           ...citiesToAdd,
@@ -115,7 +115,7 @@ class CitiesCubit extends Cubit<CitiesState> {
   }) async =>
       emit(
         state.copyWith(
-          status: CitiesStatus.data,
+          status: cities.isEmpty ? CitiesStatus.empty : CitiesStatus.data,
           cities: await _getCitiesAndCoordinates(
             cities: cities,
           ),

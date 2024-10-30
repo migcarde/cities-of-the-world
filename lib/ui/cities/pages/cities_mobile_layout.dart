@@ -16,6 +16,8 @@ class _CitiesMobileLayoutState extends State<CitiesMobileLayout>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  static const _paddingHorizontal = 8.0;
+
   @override
   void initState() {
     _tabController = TabController(
@@ -69,8 +71,23 @@ class _CitiesMobileLayoutState extends State<CitiesMobileLayout>
                     );
                   case CitiesStatus.error:
                     return const Center(
-                      child: Text(
-                          'Ooops, something was wrong, please, try again later'),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: _paddingHorizontal,
+                        ),
+                        child: Text(
+                            'Ooops, something was wrong, please, try again later'),
+                      ),
+                    );
+                  case CitiesStatus.empty:
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: _paddingHorizontal,
+                        ),
+                        child: Text(
+                            'There are no results with ${state.currentSearch}, try with another search'),
+                      ),
                     );
                 }
               },
