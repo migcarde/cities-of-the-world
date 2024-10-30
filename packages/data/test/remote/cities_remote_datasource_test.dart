@@ -3,7 +3,7 @@ import 'package:data/remote/client/cities_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'cities_test_entities.dart';
+import '../entities/cities_test_data_entities.dart';
 
 class CitiesClientMock extends Mock implements CitiesClient {}
 

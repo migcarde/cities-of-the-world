@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:domain/base/result.dart';
-import 'package:domain/cities_repository.dart';
+import 'package:domain/repositories/cities/cities_repository.dart';
 import 'package:domain/models/base_response_entity.dart';
 
 class CitiesRepositoryImpl implements CitiesRepository {

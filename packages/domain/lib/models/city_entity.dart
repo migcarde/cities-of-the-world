@@ -9,7 +9,7 @@ class CityEntity extends Equatable {
   final int countryId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final CountryEntity? countryEntity;
+  final CountryEntity? country;
 
   const CityEntity({
     required this.id,
@@ -18,7 +18,7 @@ class CityEntity extends Equatable {
     required this.countryId,
     this.createdAt,
     this.updatedAt,
-    this.countryEntity,
+    this.country,
   });
 
   @override
@@ -29,7 +29,7 @@ class CityEntity extends Equatable {
         countryId,
         createdAt,
         updatedAt,
-        countryEntity,
+        country,
       ];
 }
 
@@ -41,6 +41,6 @@ extension CityRemoteEntityExtensions on CityRemoteEntity {
         countryId: countryId ?? -1,
         createdAt: createdAt,
         updatedAt: updatedAt,
-        countryEntity: country?.entity,
+        country: country?.entity,
       );
 }
