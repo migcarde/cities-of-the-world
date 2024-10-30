@@ -1,10 +1,13 @@
+import 'package:data/local/entities/city_local_entity.dart';
+import 'package:data/local/entities/country_local_entity.dart';
+import 'package:data/local/entities/page_local_entity.dart';
+import 'package:data/local/entities/pagination_local_entity.dart';
 import 'package:data/remote/entities/base_response_remote_entity.dart';
 import 'package:data/remote/entities/city_remote_entity.dart';
 import 'package:data/remote/entities/country_remote_entity.dart';
 import 'package:data/remote/entities/page_remote_entity.dart';
 import 'package:data/remote/entities/pagination_remote_entity.dart';
 import 'package:domain/domain.dart';
-import 'package:domain/operations/cities/get_cities_params.dart';
 
 final _createdAt = DateTime.now();
 final _updatedAt = DateTime.now();
@@ -84,4 +87,89 @@ const getCitiesWithAllParams = GetCitiesParams(
   name: 'na',
   page: 1,
   include: 'country',
+);
+
+// Local entities
+final pageLocalEntity = PageLocalEntity(
+  search: 'Chipiona',
+  items: [
+    CityLocalEntity(
+      id: 1,
+      name: 'Chipiona',
+      localName: 'Chipiona',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      country: CountryLocalEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: PaginationLocalEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
+  ),
+);
+
+final pageLocalEntityPage2 = PageLocalEntity(
+  search: 'Rota',
+  items: [
+    CityLocalEntity(
+      id: 1,
+      name: 'Rota',
+      localName: 'Rota',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      country: CountryLocalEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: PaginationLocalEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
+  ),
+);
+
+final pageLocalEntityWithEmptySearch = PageLocalEntity(
+  search: '',
+  items: [
+    CityLocalEntity(
+      id: 1,
+      name: 'Chipiona',
+      localName: 'Chipiona',
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      countryId: 2,
+      country: CountryLocalEntity(
+        id: 3,
+        name: 'Spain',
+        code: '01123',
+        createdAt: _createdAt,
+        updatedAt: _updatedAt,
+        continentId: 4,
+      ),
+    ),
+  ],
+  pagination: PaginationLocalEntity(
+    currentPage: 1,
+    lastPage: 10,
+    perPage: 24,
+    total: 100,
+  ),
 );

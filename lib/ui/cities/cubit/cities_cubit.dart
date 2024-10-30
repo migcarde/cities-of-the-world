@@ -28,8 +28,8 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     result.when(
       success: (response) async => await _onSuccessInit(
-        cities: response.data?.items ?? [],
-        lastPage: response.data?.pagination?.lastPage ?? 1,
+        cities: response.items,
+        lastPage: response.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
     );
@@ -43,8 +43,8 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     result.when(
       success: (response) async => await _onSuccessUpdate(
-        cities: response.data?.items ?? [],
-        lastPage: response.data?.pagination?.lastPage ?? 1,
+        cities: response.items,
+        lastPage: response.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
     );
@@ -66,8 +66,8 @@ class CitiesCubit extends Cubit<CitiesState> {
 
     result.when(
       success: (response) async => await _onSuccessSearch(
-        cities: response.data?.items ?? [],
-        lastPage: response.data?.pagination?.lastPage ?? 1,
+        cities: response.items,
+        lastPage: response.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
     );
@@ -130,7 +130,7 @@ class CitiesCubit extends Cubit<CitiesState> {
         ),
       );
 
-  Future<Result<BaseResponseEntity>> _getCities({
+  Future<Result<PageEntity>> _getCities({
     String? city,
     int? page,
   }) async =>

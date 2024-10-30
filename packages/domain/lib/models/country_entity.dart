@@ -27,6 +27,15 @@ class CountryEntity extends Equatable {
         createdAt,
         updatedAt,
       ];
+
+  CountryLocalEntity get localEntity => CountryLocalEntity(
+        id: id,
+        name: name,
+        code: code,
+        continentId: continentId,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
 }
 
 extension CountryRemoteEntityExtensions on CountryRemoteEntity {
@@ -35,6 +44,17 @@ extension CountryRemoteEntityExtensions on CountryRemoteEntity {
         name: name ?? '',
         code: code ?? '',
         continentId: continentId ?? -1,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+}
+
+extension CountryLocalEntityExtensions on CountryLocalEntity {
+  CountryEntity get entity => CountryEntity(
+        id: id,
+        name: name,
+        code: code,
+        continentId: continentId,
         createdAt: createdAt,
         updatedAt: updatedAt,
       );

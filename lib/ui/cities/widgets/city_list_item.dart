@@ -1,6 +1,5 @@
 import 'package:cities_of_the_world/ui/cities/widgets/not_available_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CityListItem extends StatelessWidget {
   const CityListItem({

@@ -9,14 +9,19 @@ import '../entities/cities_test_domain_entities.dart';
 class CitiesRemoteDatasourceMock extends Mock
     implements CitiesRemoteDatasource {}
 
+class CitiesLocalDatasourceMock extends Mock implements CitiesLocalDatasource {}
+
 void main() {
   late CitiesRemoteDatasourceMock citiesRemoteDatasource;
+  late CitiesLocalDatasourceMock citiesLocalDatasource;
   late CitiesRepositoryImpl citiesRepository;
 
   setUp(() {
     citiesRemoteDatasource = CitiesRemoteDatasourceMock();
+    citiesLocalDatasource = CitiesLocalDatasourceMock();
     citiesRepository = CitiesRepositoryImpl(
       citiesRemoteDatasource: citiesRemoteDatasource,
+      citiesLocalDatasource: citiesLocalDatasource,
     );
   });
 
@@ -30,7 +35,7 @@ void main() {
       final result = await citiesRepository.getCities();
 
       // Then
-      expect((result as Success).data, baseResponseEntity);
+      expect((result as Success).data, baseResponseEntity.data!);
       verify(() => citiesRemoteDatasource.getCities()).called(1);
     });
 
@@ -45,7 +50,7 @@ void main() {
       );
 
       // Then
-      expect((result as Success).data, baseResponseEntity);
+      expect((result as Success).data, baseResponseEntity.data!);
       verify(() => citiesRemoteDatasource.getCities(name: 'na')).called(1);
     });
 
@@ -60,7 +65,7 @@ void main() {
       );
 
       // Then
-      expect((result as Success).data, baseResponseEntity);
+      expect((result as Success).data, baseResponseEntity.data!);
       verify(() => citiesRemoteDatasource.getCities(page: 1)).called(1);
     });
 
@@ -75,7 +80,7 @@ void main() {
       );
 
       // Then
-      expect((result as Success).data, baseResponseEntity);
+      expect((result as Success).data, baseResponseEntity.data!);
       verify(() => citiesRemoteDatasource.getCities(include: 'country'))
           .called(1);
     });
@@ -96,12 +101,25 @@ void main() {
       );
 
       // Then
-      expect((result as Success).data, baseResponseEntity);
+      expect((result as Success).data, baseResponseEntity.data!);
       verify(() => citiesRemoteDatasource.getCities(
             name: 'na',
             page: 1,
             include: 'country',
           )).called(1);
+    });
+
+    test('Success with local data', () async {
+      // Given
+      when(() => citiesLocalDatasource.getCities())
+          .thenAnswer((_) async => pageLocalEntity);
+
+      // When
+      final result = await citiesRepository.getCities();
+
+      // Then
+      expect((result as Success).data, baseResponseEntity.data!);
+      verify(() => citiesLocalDatasource.getCities()).called(1);
     });
 
     test('Failure', () async {
@@ -114,6 +132,121 @@ void main() {
       // Then
       expect(result, isA<Failure>());
       verify(() => citiesRemoteDatasource.getCities()).called(1);
+    });
+  });
+
+  group('Save cities', () {
+    test('Success with empty search', () async {
+      // Given
+      when(() =>
+              citiesLocalDatasource.saveCities(pageLocalEntityWithEmptySearch))
+          .thenAnswer((_) async {});
+
+      // When
+      final result = await citiesRepository.saveCities(
+        search: '',
+        page: baseResponseEntity.data!,
+      );
+
+      expect(result, isA<Success>());
+      verify(
+        () => citiesLocalDatasource.saveCities(
+          pageLocalEntityWithEmptySearch,
+        ),
+      ).called(1);
+    });
+
+    test('Success with search', () async {
+      // Given
+      when(() => citiesLocalDatasource.saveCities(pageLocalEntity))
+          .thenAnswer((_) async {});
+
+      // When
+      final result = await citiesRepository.saveCities(
+        search: 'Chipiona',
+        page: baseResponseEntity.data!,
+      );
+
+      expect(result, isA<Success>());
+      verify(
+        () => citiesLocalDatasource.saveCities(
+          pageLocalEntity,
+        ),
+      ).called(1);
+    });
+  });
+
+  group('Get cities from local -', () {
+    test('Success with default parameters', () async {
+      // Given
+      when(() => citiesLocalDatasource.getCities(
+            search: '',
+            page: 1,
+          )).thenAnswer((_) async => pageLocalEntityWithEmptySearch);
+
+      // When
+      final result = await citiesRepository.getCitiesFromLocal(
+        search: '',
+        page: 1,
+      );
+
+      expect((result as Success).data, baseResponseEntity.data!);
+      verify(() => citiesLocalDatasource.getCities(search: '', page: 1))
+          .called(1);
+    });
+
+    test('Success with search', () async {
+      // Given
+      when(() => citiesLocalDatasource.getCities(
+            search: 'na',
+            page: 1,
+          )).thenAnswer((_) async => pageLocalEntity);
+
+      // When
+      final result = await citiesRepository.getCitiesFromLocal(
+        search: 'na',
+        page: 1,
+      );
+
+      expect((result as Success).data, baseResponseEntity.data!);
+      verify(() => citiesLocalDatasource.getCities(search: 'na', page: 1))
+          .called(1);
+    });
+
+    test('Success with no results', () async {
+      // Given
+      when(() => citiesLocalDatasource.getCities(
+            search: 'na',
+            page: 1,
+          )).thenAnswer((_) async => null);
+
+      // When
+      final result = await citiesRepository.getCitiesFromLocal(
+        search: 'na',
+        page: 1,
+      );
+
+      expect((result as Success).data, isNull);
+      verify(() => citiesLocalDatasource.getCities(search: 'na', page: 1))
+          .called(1);
+    });
+
+    test('Failure', () async {
+      // Given
+      when(() => citiesLocalDatasource.getCities(
+            search: 'na',
+            page: 1,
+          )).thenThrow(Exception());
+
+      // When
+      final result = await citiesRepository.getCitiesFromLocal(
+        search: 'na',
+        page: 1,
+      );
+
+      expect(result, isA<Failure>());
+      verify(() => citiesLocalDatasource.getCities(search: 'na', page: 1))
+          .called(1);
     });
   });
 }

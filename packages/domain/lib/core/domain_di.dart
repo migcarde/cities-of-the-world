@@ -12,6 +12,7 @@ class DomainDi {
     getIt.registerFactory<CitiesRepository>(
       () => CitiesRepositoryImpl(
         citiesRemoteDatasource: getIt(),
+        citiesLocalDatasource: getIt(),
       ),
     );
 

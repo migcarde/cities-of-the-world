@@ -28,6 +28,12 @@ class CityLocalEntity extends HiveObject with EquatableMixin {
   @HiveField(6)
   final CountryLocalEntity? country;
 
+  @HiveField(7)
+  final double? latitude;
+
+  @HiveField(8)
+  final double? longitude;
+
   CityLocalEntity({
     required this.id,
     required this.name,
@@ -36,6 +42,8 @@ class CityLocalEntity extends HiveObject with EquatableMixin {
     this.country,
     this.createdAt,
     this.updatedAt,
+    this.latitude,
+    this.longitude,
   });
 
   @override
@@ -47,5 +55,7 @@ class CityLocalEntity extends HiveObject with EquatableMixin {
         country,
         createdAt,
         updatedAt,
+        latitude,
+        longitude,
       ];
 }

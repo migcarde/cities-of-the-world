@@ -17,11 +17,33 @@ class PageEntity extends Equatable {
         items,
         pagination,
       ];
+
+  PageLocalEntity localEntity({
+    required String search,
+  }) =>
+      PageLocalEntity(
+        items: items.map((item) => item.localEntity).toList(),
+        pagination: pagination?.localEntity ??
+            PaginationLocalEntity(
+              currentPage: 1,
+              lastPage: 1,
+              perPage: items.length,
+              total: items.length,
+            ),
+        search: search,
+      );
 }
 
 extension PageRemoteEntityExtensions on PageRemoteEntity {
   PageEntity get entity => PageEntity(
         items: items?.map((item) => item.entity).toList() ?? [],
         pagination: pagination?.entity,
+      );
+}
+
+extension PageLocalEntityExtensions on PageLocalEntity {
+  PageEntity get entity => PageEntity(
+        items: items.map((item) => item.entity).toList(),
+        pagination: pagination.entity,
       );
 }

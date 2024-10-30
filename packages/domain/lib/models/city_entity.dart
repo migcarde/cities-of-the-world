@@ -10,6 +10,8 @@ class CityEntity extends Equatable {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final CountryEntity? country;
+  final double? latitude;
+  final double? longitude;
 
   const CityEntity({
     required this.id,
@@ -19,6 +21,8 @@ class CityEntity extends Equatable {
     this.createdAt,
     this.updatedAt,
     this.country,
+    this.latitude,
+    this.longitude,
   });
 
   @override
@@ -30,7 +34,44 @@ class CityEntity extends Equatable {
         createdAt,
         updatedAt,
         country,
+        latitude,
+        longitude,
       ];
+
+  CityEntity copyWith({
+    int? id,
+    String? name,
+    String? localName,
+    int? countryId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    CountryEntity? country,
+    double? latitude,
+    double? longitude,
+  }) =>
+      CityEntity(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        localName: localName ?? this.localName,
+        countryId: countryId ?? this.countryId,
+        country: country ?? this.country,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        latitude: latitude ?? this.latitude,
+        longitude: longitude ?? this.longitude,
+      );
+
+  CityLocalEntity get localEntity => CityLocalEntity(
+        id: id,
+        name: name,
+        localName: localName,
+        countryId: countryId,
+        country: country?.localEntity,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        latitude: latitude,
+        longitude: longitude,
+      );
 }
 
 extension CityRemoteEntityExtensions on CityRemoteEntity {
@@ -42,5 +83,19 @@ extension CityRemoteEntityExtensions on CityRemoteEntity {
         createdAt: createdAt,
         updatedAt: updatedAt,
         country: country?.entity,
+      );
+}
+
+extension CityLocalEntityExtensions on CityLocalEntity {
+  CityEntity get entity => CityEntity(
+        id: id,
+        name: name,
+        localName: localName,
+        countryId: countryId,
+        country: country?.entity,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        latitude: latitude,
+        longitude: longitude,
       );
 }

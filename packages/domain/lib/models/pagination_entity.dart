@@ -21,6 +21,13 @@ class PaginationEntity extends Equatable {
         perPage,
         total,
       ];
+
+  PaginationLocalEntity get localEntity => PaginationLocalEntity(
+        currentPage: currentPage,
+        lastPage: lastPage,
+        perPage: perPage,
+        total: total,
+      );
 }
 
 extension PaginationRemoteEntityExtensions on PaginationRemoteEntity {
@@ -29,5 +36,14 @@ extension PaginationRemoteEntityExtensions on PaginationRemoteEntity {
         lastPage: lastPage ?? 0,
         perPage: perPage ?? 0,
         total: total ?? 0,
+      );
+}
+
+extension PaginationLocalEntityExtensions on PaginationLocalEntity {
+  PaginationEntity get entity => PaginationEntity(
+        currentPage: currentPage,
+        lastPage: lastPage,
+        perPage: perPage,
+        total: total,
       );
 }
