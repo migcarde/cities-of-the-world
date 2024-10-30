@@ -4,11 +4,21 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CitiesPage extends StatelessWidget {
+class CitiesPage extends StatefulWidget {
   const CitiesPage({super.key});
 
   @override
+  State<CitiesPage> createState() => _CitiesPageState();
+}
+
+class _CitiesPageState extends State<CitiesPage>
+    with SingleTickerProviderStateMixin {
+  @override
   Widget build(BuildContext context) {
+    final tabController = TabController(
+      length: 2,
+      vsync: this,
+    );
     return BlocProvider<CitiesCubit>(
       create: (context) => getIt<CitiesCubit>()..init(),
       child: Column(
@@ -28,6 +38,7 @@ class CitiesPage extends StatelessWidget {
                   );
                 case CitiesStatus.data:
                   return CitiesMobileLayout(
+                    tabController: tabController,
                     cities: state.cities,
                     isLastPage: state.currentPage >= state.lastPage,
                     getNextPage: () =>

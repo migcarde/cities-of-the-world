@@ -1,15 +1,18 @@
 import 'package:cities_of_the_world/ui/cities/models/city_view_model.dart';
-import 'package:cities_of_the_world/ui/cities/widgets/city_list_item.dart';
+import 'package:cities_of_the_world/ui/cities/widgets/cities_list.dart';
+import 'package:cities_of_the_world/ui/cities/widgets/cities_map.dart';
 import 'package:flutter/material.dart';
 
 class CitiesMobileLayout extends StatelessWidget {
   const CitiesMobileLayout({
     super.key,
+    required this.tabController,
     required this.cities,
     required this.isLastPage,
     required this.getNextPage,
   });
 
+  final TabController tabController;
   final List<CityViewModel> cities;
   final bool isLastPage;
   final VoidCallback getNextPage;
@@ -17,43 +20,38 @@ class CitiesMobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.separated(
-        shrinkWrap: true,
-        controller: _setUpController(),
-        itemBuilder: (context, index) {
-          if (index >= cities.length) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            final city = cities[index];
-
-            return CityListItem(
-              city: city.name,
-              location: city.location,
-              country: city.country,
-            );
-          }
-        },
-        separatorBuilder: (context, index) => const SizedBox(
-          height: 10.0,
-        ),
-        itemCount: isLastPage ? cities.length : cities.length + 1,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 44.0,
+            child: TabBar(
+              controller: tabController,
+              tabs: const [
+                Tab(
+                  text: 'List',
+                ),
+                Tab(text: 'Map'),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                CitiesList(
+                  cities: cities,
+                  isLastPage: isLastPage,
+                  getNextPage: getNextPage,
+                ),
+                CitiesMap(
+                  cities: cities,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  ScrollController _setUpController() {
-    final scrollController = ScrollController();
-
-    scrollController.addListener(() {
-      if (scrollController.position.atEdge &&
-          scrollController.position.pixels != 0 &&
-          !isLastPage) {
-        getNextPage();
-      }
-    });
-
-    return scrollController;
   }
 }
