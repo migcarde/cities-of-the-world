@@ -3,6 +3,8 @@
         android:label="cities_of_the_world"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+          <meta-data android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyDLTMseM9uel7M3wJ2x6RizF3J7TiL7ZfU"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -19,7 +21,7 @@
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
-              />
+            />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
