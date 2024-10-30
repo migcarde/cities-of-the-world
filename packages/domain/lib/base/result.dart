@@ -28,7 +28,10 @@ class Result<T> extends Equatable {
   factory Result.success(T result) => Success<T>(result);
   factory Result.failure(Object failure) => Failure(failure);
 
-  void when(Function(T) success, Function(Object) failure) {
+  void when({
+    required Function(T) success,
+    required Function(Object) failure,
+  }) {
     if (this is Success<T>) {
       success((this as Success<T>).data);
     } else if (this is Failure<T>) {

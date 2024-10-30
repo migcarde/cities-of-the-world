@@ -9,11 +9,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # External packages
+  flutter_bloc: ^8.1.6
+
+  # Internal packages
+  core:
+    path: ./packages/core
+  domain:
+    path: ./packages/domain
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  mocktail: ^1.0.4
+  bloc_test: ^9.1.7
 
 flutter:
   uses-material-design: true
