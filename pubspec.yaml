@@ -12,6 +12,7 @@ dependencies:
   
   # External packages
   flutter_bloc: ^8.1.6
+  geocoding: ^3.0.0
 
   # Internal packages
   core:
