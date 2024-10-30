@@ -23,21 +23,57 @@ class CitiesCubit extends Cubit<CitiesState> {
     final result = await _getCities(city: 'a', page: 3);
 
     result.when(
-      success: (response) => _onSuccess(
+      success: (response) => _onSuccessInit(
         cities: response.data?.items ?? [],
+        lastPage: response.data?.pagination?.lastPage ?? 1,
       ),
       failure: (_) => _onFailure(),
     );
   }
 
-  void _onSuccess({required List<CityEntity> cities}) {
-    emit(
-      state.copyWith(
-        status: CitiesStatus.data,
-        cities: cities.map((city) => city.viewModel).toList(),
+  Future<void> getNextPage() async {
+    final result = await _getCities(
+      page: state.currentPage + 1,
+      city: state.currentSearch.isNotEmpty ? state.currentSearch : null,
+    );
+
+    result.when(
+      success: (response) => _onSuccessUpdate(
+        cities: response.data?.items ?? [],
+        lastPage: response.data?.pagination?.lastPage ?? 1,
       ),
+      failure: (_) => _onFailure(),
     );
   }
+
+  void _onSuccessInit({
+    required List<CityEntity> cities,
+    required int lastPage,
+  }) =>
+      emit(
+        state.copyWith(
+          status: CitiesStatus.data,
+          cities: cities.map((city) => city.viewModel).toList(),
+          currentPage: 1,
+          lastPage: lastPage,
+        ),
+      );
+
+  void _onSuccessUpdate({
+    required List<CityEntity> cities,
+    required int lastPage,
+  }) =>
+      emit(
+        state.copyWith(
+          status: CitiesStatus.data,
+          cities: [
+            ...state.cities,
+            ...cities.map((city) => city.viewModel),
+          ],
+          currentPage: state.currentPage + 1,
+          lastPage: lastPage,
+        ),
+      );
 
   void _onFailure() => emit(
         state.copyWith(

@@ -19,7 +19,10 @@ class CitiesPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             case CitiesStatus.data:
-              return CitiesMobileLayout(cities: state.cities);
+              return CitiesMobileLayout(
+                cities: state.cities,
+                getNextPage: () => context.read<CitiesCubit>().getNextPage(),
+              );
             case CitiesStatus.error:
               return const Center(
                 child:
