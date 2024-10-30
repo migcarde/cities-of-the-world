@@ -1,16 +1,20 @@
 import 'package:bloc/bloc.dart';
+import 'package:cities_of_the_world/core/services/location_service.dart';
 import 'package:cities_of_the_world/ui/cities/models/city_view_model.dart';
 import 'package:core/core.dart';
 import 'package:domain/base/result.dart';
 import 'package:domain/domain.dart';
+import 'package:geocoding/geocoding.dart';
 
 part 'cities_state.dart';
 
 class CitiesCubit extends Cubit<CitiesState> {
   final GetCities getCities;
+  final LocationService locationService;
 
   CitiesCubit({
     required this.getCities,
+    required this.locationService,
   }) : super(const CitiesState());
 
   Future<void> init() async {
@@ -23,7 +27,7 @@ class CitiesCubit extends Cubit<CitiesState> {
     final result = await _getCities();
 
     result.when(
-      success: (response) => _onSuccessInit(
+      success: (response) async => await _onSuccessInit(
         cities: response.data?.items ?? [],
         lastPage: response.data?.pagination?.lastPage ?? 1,
       ),
@@ -38,7 +42,7 @@ class CitiesCubit extends Cubit<CitiesState> {
     );
 
     result.when(
-      success: (response) => _onSuccessUpdate(
+      success: (response) async => await _onSuccessUpdate(
         cities: response.data?.items ?? [],
         lastPage: response.data?.pagination?.lastPage ?? 1,
       ),
@@ -61,7 +65,7 @@ class CitiesCubit extends Cubit<CitiesState> {
     );
 
     result.when(
-      success: (response) => _onSuccessSearch(
+      success: (response) async => await _onSuccessSearch(
         cities: response.data?.items ?? [],
         lastPage: response.data?.pagination?.lastPage ?? 1,
       ),
@@ -69,43 +73,52 @@ class CitiesCubit extends Cubit<CitiesState> {
     );
   }
 
-  void _onSuccessInit({
+  Future<void> _onSuccessInit({
     required List<CityEntity> cities,
     required int lastPage,
-  }) =>
+  }) async =>
       emit(
         state.copyWith(
           status: CitiesStatus.data,
-          cities: cities.map((city) => city.viewModel).toList(),
+          cities: await _getCitiesAndCoordinates(
+            cities: cities,
+          ),
           currentPage: 1,
           lastPage: lastPage,
         ),
       );
 
-  void _onSuccessUpdate({
+  Future<void> _onSuccessUpdate({
     required List<CityEntity> cities,
     required int lastPage,
-  }) =>
-      emit(
-        state.copyWith(
-          status: CitiesStatus.data,
-          cities: [
-            ...state.cities,
-            ...cities.map((city) => city.viewModel),
-          ],
-          currentPage: state.currentPage + 1,
-          lastPage: lastPage,
-        ),
-      );
+  }) async {
+    final citiesToAdd = await _getCitiesAndCoordinates(
+      cities: cities,
+    );
 
-  void _onSuccessSearch({
+    emit(
+      state.copyWith(
+        status: CitiesStatus.data,
+        cities: [
+          ...state.cities,
+          ...citiesToAdd,
+        ],
+        currentPage: state.currentPage + 1,
+        lastPage: lastPage,
+      ),
+    );
+  }
+
+  Future<void> _onSuccessSearch({
     required List<CityEntity> cities,
     required int lastPage,
-  }) =>
+  }) async =>
       emit(
         state.copyWith(
           status: CitiesStatus.data,
-          cities: cities.map((city) => city.viewModel).toList(),
+          cities: await _getCitiesAndCoordinates(
+            cities: cities,
+          ),
           currentPage: 1,
           lastPage: lastPage,
         ),
@@ -128,4 +141,32 @@ class CitiesCubit extends Cubit<CitiesState> {
           name: city,
         ),
       );
+
+  Future<Location?> _getLocation({required String name}) async {
+    final result = await locationService.getLocationFromAddress(
+      address: name,
+    );
+
+    return result;
+  }
+
+  Future<List<CityViewModel>> _getCitiesAndCoordinates({
+    required List<CityEntity> cities,
+  }) async {
+    List<CityViewModel> result = [];
+
+    for (var i = 0; i < cities.length; i++) {
+      final city = cities[i];
+      final location = await _getLocation(name: city.name);
+
+      result.add(
+        city.viewModel(
+          latitude: location?.latitude,
+          longitude: location?.longitude,
+        ),
+      );
+    }
+
+    return result;
+  }
 }

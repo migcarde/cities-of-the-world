@@ -6,6 +6,7 @@ class CubitsDi {
     getIt.registerLazySingleton(
       () => CitiesCubit(
         getCities: getIt(),
+        locationService: getIt(),
       ),
     );
   }
