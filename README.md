@@ -54,12 +54,19 @@ To avoid scrolling issues, the app only changes between list and map view by tap
 git clone https://github.com/migcarde/cities-of-the-world.git
 ```
 3. Open the `cities_of_the_world` folder in Visual Studio Code or Android Studio.
-4. Select the device to test the app.
+4. Open a terminal
+    1. **If you are in windows**, open bash instead of terminal.
+    ![image](images/readme/open_bash.png)
+    2. Execute this command:
+    ```
+    ./build_cities_of_the_world.sh
+    ```
+5. Select the device to test the app.
 
 ![image](images/readme/choose_device_1.png)
 
 ![image](images/readme/choose_device_2.png)
 
-5. Execute the app using the `cities_of_the_world` environment.
+6. Execute the app using the `cities_of_the_world` environment.
 
 ![image](images/readme/run_project.png)
