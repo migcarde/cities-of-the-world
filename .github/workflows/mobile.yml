@@ -11,7 +11,7 @@ on:
       - develop
 jobs:
   build-android:
-    name: Build Android test force push
+    name: Build Android
     
     runs-on: ubuntu-latest
 
