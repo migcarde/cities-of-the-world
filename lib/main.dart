@@ -1,6 +1,12 @@
+import 'package:cities_of_the_world/ui/cities/pages/cities_page.dart';
+import 'package:cities_of_the_world/core/di/cities_of_the_world_di.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CitiesOfTheWorldDi.init();
+  await getIt<HiveAdaptersService>().init();
   runApp(const MainApp());
 }
 
@@ -11,8 +17,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+        body: SafeArea(
+          child: CitiesPage(),
         ),
       ),
     );
