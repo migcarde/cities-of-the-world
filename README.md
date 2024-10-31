@@ -67,6 +67,9 @@ git clone https://github.com/migcarde/cities-of-the-world.git
 
 ![image](images/readme/choose_device_2.png)
 
+> [!IMPORTANT]
+> You can debug the app in iOS simulator. However, if you want to debug on iOS physical device you must follow these steps to sign the app as iOS developer.
+
 6. Execute the app using the `cities_of_the_world` environment.
 
 ![image](images/readme/run_project.png)
