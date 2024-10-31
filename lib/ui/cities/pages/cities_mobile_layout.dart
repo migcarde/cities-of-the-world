@@ -1,5 +1,6 @@
 import 'package:cities_of_the_world/ui/cities/cubit/cities_cubit.dart';
 import 'package:cities_of_the_world/ui/cities/widgets/cities_list.dart';
+import 'package:cities_of_the_world/ui/cities/widgets/cities_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,10 +64,9 @@ class _CitiesMobileLayoutState extends State<CitiesMobileLayout>
                           getNextPage: () =>
                               context.read<CitiesCubit>().getNextPage(),
                         ),
-                        // CitiesMap(
-                        //   cities: state.cities,
-                        // ),
-                        Text('Map'),
+                        CitiesMap(
+                          cities: state.cities,
+                        ),
                       ],
                     );
                   case CitiesStatus.error:

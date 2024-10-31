@@ -5,4 +5,4 @@ flutter pub get && dart run build_runner build --delete-conflicting-outputs
 cd ../domain
 flutter pub get
 cd ../../
-flutter pub
+flutter pub get
