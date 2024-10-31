@@ -29,8 +29,12 @@ jobs:
           flutter-version-file: pubspec.yaml
           channel: "stable"
 
+      - name: Install packages dependencies
+        run: ./build_cities_of_the_world.sh
+
       - name: Install dependencies
         run: flutter pub get
+
       - name: Analyze project source
         run: dart analyze
       
