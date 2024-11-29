@@ -3,7 +3,7 @@
 A flutter project that provides a list of locations and can be visualized in a map.
 
 > [!IMPORTANT]
-> Note that the app has some security risks, like Google Maps API hardcoded on the code, I assume this risk to make the installation easier.
+> Note that the app has some security risks, like Google Maps API hardcoded on the code, I assume this risk to make the installation easier. But in this moment the **API KEY is disabled and map doesn't working.**
 
 
 ## Platform support
